@@ -8,50 +8,81 @@ import static io.restassured.RestAssured.given;
 public class Post {
     private final String apiKey = "95765b6be78a422da5a96155536fae98";
     public final String username = "toredo89";
+    String id;
 
     @Test
     void addMealTest() {
-        String id = given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9\n")
-                .queryParam("username", "toredo89")
-                .queryParam("apiKey", apiKey)
+        id = given()
+                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
+                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
                 .body("{\n"
-                        + " \"title\": Nachos,\n"
+                        + " \"date\": 1644881179,\n"
                         + " \"slot\": 1,\n"
                         + " \"position\": 0,\n"
                         + " \"type\": \"INGREDIENTS\",\n"
                         + " \"value\": {\n"
                         + " \"ingredients\": [\n"
                         + " {\n"
-                        + " \"name\": \"3 banana\"\n"
+                        + " \"name\": \"2 banana\"\n"
                         + " }\n"
                         + " ]\n"
                         + " }\n"
                         + "}")
                 .when()
-                .post("https://api.spoonacular.com/mealplanner/:toredo89/shopping-list/items/")
+                .post("https://api.spoonacular.com/mealplanner/toredo89/items")
                 .then()
                 .statusCode(200)
                 .extract()
                 .jsonPath()
                 .get("id")
                 .toString();
-
-        given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
-                .queryParam("apiKey", apiKey)
-                .queryParam("username", "toredo89")
-                .delete("https://api.spoonacular.com/mealplanner/:toredo89/shopping-list/items/" + id)
-                .then()
-                .statusCode(200);
     }
+
     @AfterEach
     void tearDown() {
         given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9\n")
+                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
                 .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
-                .queryParam("username", "toredo89")
-                .delete("https://api.spoonacular.com/mealplanner/:toredo89/shopping-list/items/")
+                .delete("https://api.spoonacular.com/mealplanner/toredo89/items/" + id)
+                .then()
+                .statusCode(200);
+    }
+
+    @Test
+    void getMealTest() {
+        id = given()
+                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
+                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
+                .when()
+                .get("https://api.spoonacular.com/mealplanner/toredo89/items/" + id)
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .get("id")
+                .toString();
+    }
+
+
+    @Test
+    void addMealTestOne() {
+        id = given()
+                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
+                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
+                .when()
+                .get("https://api.spoonacular.com/mealplanner/toredo89/shopping-list/items")
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .toString();
+    }
+    @AfterEach
+    void tearDownOne() {
+        given()
+                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
+                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
+                .delete("https://api.spoonacular.com/mealplanner/toredo89/shopping-list/items" + id)
                 .then()
                 .statusCode(200);
     }
