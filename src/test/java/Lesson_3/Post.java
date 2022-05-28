@@ -47,43 +47,4 @@ public class Post {
                 .then()
                 .statusCode(200);
     }
-
-    @Test
-    void getMealTest() {
-        id = given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
-                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
-                .when()
-                .get("https://api.spoonacular.com/mealplanner/toredo89/items/" + id)
-                .then()
-                .statusCode(200)
-                .extract()
-                .jsonPath()
-                .get("id")
-                .toString();
-    }
-
-
-    @Test
-    void addMealTestOne() {
-        id = given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
-                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
-                .when()
-                .get("https://api.spoonacular.com/mealplanner/toredo89/shopping-list/items")
-                .then()
-                .statusCode(200)
-                .extract()
-                .jsonPath()
-                .toString();
-    }
-    @AfterEach
-    void tearDownOne() {
-        given()
-                .queryParam("hash", "bed380b6891cd6278dd129c1743024184e8e72d9")
-                .queryParam("apiKey", "95765b6be78a422da5a96155536fae98")
-                .delete("https://api.spoonacular.com/mealplanner/toredo89/shopping-list/items" + id)
-                .then()
-                .statusCode(200);
-    }
 }
